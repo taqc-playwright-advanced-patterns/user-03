@@ -8,6 +8,9 @@ import type { CheckoutDataStrategy } from './CheckoutDataStrategy';
  */
 export class ValidCheckoutStrategy implements CheckoutDataStrategy {
   getData(): CheckoutFormData {
-    throw new Error('ValidCheckoutStrategy.getData() is not implemented — see README, task 3');
+    return {
+      name: 'Anton Tester',
+      email: 'anton.tester@example.com',
+    };
   }
 }

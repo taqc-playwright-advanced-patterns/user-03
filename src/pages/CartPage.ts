@@ -6,19 +6,25 @@ import type { Locator, Page } from '@playwright/test';
 export class CartPage {
   readonly page: Page;
   readonly checkoutButton: Locator;
+  readonly cartItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
     // Same Total button as on the menu: data-test="checkout"
     this.checkoutButton = page.getByRole('button', { name: 'Proceed to checkout' });
+    this.cartItems = page.locator('.list-item');
   }
 
   /** Cart line item (e.g. "Espresso"). */
   itemByName(name: string): Locator {
-    return this.page.locator('.list-item').filter({ hasText: name });
+    return this.page.locator('.list-item:visible').filter({ hasText: name }).first();
   }
 
   async proceedToCheckout(): Promise<void> {
     await this.checkoutButton.click();
+  }
+
+  async getItemsCount(): Promise<number> {
+    return this.cartItems.count();
   }
 }

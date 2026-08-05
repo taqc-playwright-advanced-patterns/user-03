@@ -10,7 +10,11 @@ import type { AddToCartStrategy } from './AddToCartStrategy';
  * 3. Wait for the cart counter to update if needed
  */
 export class DirectClickStrategy implements AddToCartStrategy {
-  async add(_page: Page, _productName?: string): Promise<void> {
-    throw new Error('DirectClickStrategy.add() is not implemented — see README, task 2');
+  async add(page: Page, productName?: string): Promise<void> {
+    if (!productName) {
+      throw new Error('DirectClickStrategy requires productName');
+    }
+
+    await page.getByLabel(productName, { exact: true }).click();
   }
 }

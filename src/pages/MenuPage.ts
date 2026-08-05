@@ -23,7 +23,7 @@ export class MenuPage {
   }
 
   async goto(): Promise<void> {
-    await this.page.goto('/');
+    await this.page.goto('');
   }
 
   /**
@@ -37,5 +37,11 @@ export class MenuPage {
 
   async openCart(): Promise<void> {
     await this.cartLink.click();
+  }
+
+  async getCartCount(): Promise<number> {
+    const text = (await this.cartLink.textContent()) ?? '';
+    const match = text.match(/\((\d+)\)/);
+    return match ? Number(match[1]) : 0;
   }
 }

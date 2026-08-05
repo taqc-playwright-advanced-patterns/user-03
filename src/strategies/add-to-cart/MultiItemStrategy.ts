@@ -10,9 +10,11 @@ import type { AddToCartStrategy } from './AddToCartStrategy';
  * 3. The `productName` parameter can be unused
  */
 export class MultiItemStrategy implements AddToCartStrategy {
-  // TODO: add a field for the drink list and a constructor
+  constructor(private readonly productNames: string[]) {}
 
-  async add(_page: Page, _productName?: string): Promise<void> {
-    throw new Error('MultiItemStrategy.add() is not implemented — see README, task 2');
+  async add(page: Page, _productName?: string): Promise<void> {
+    for (const name of this.productNames) {
+      await page.getByLabel(name, { exact: true }).click();
+    }
   }
 }

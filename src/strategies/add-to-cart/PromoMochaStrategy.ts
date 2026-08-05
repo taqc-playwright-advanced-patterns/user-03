@@ -15,7 +15,20 @@ import type { AddToCartStrategy } from './AddToCartStrategy';
  * 3. `productName` can be ignored — this strategy is Mocha-specific
  */
 export class PromoMochaStrategy implements AddToCartStrategy {
-  async add(_page: Page, _productName?: string): Promise<void> {
-    throw new Error('PromoMochaStrategy.add() is not implemented — see README, task 2');
+  async add(page: Page, _productName?: string): Promise<void> {
+    const cartText = (await page.getByRole('link', { name: 'Cart page' }).textContent()) ?? '';
+    const countMatch = cartText.match(/\((\d+)\)/);
+    const currentCount = countMatch ? Number(countMatch[1]) : 0;
+
+    let clicksUntilPromo = 3 - (currentCount % 3);
+    if (clicksUntilPromo === 0) {
+      clicksUntilPromo = 3;
+    }
+
+    for (let i = 0; i < clicksUntilPromo; i += 1) {
+      await page.getByLabel('Espresso', { exact: true }).click();
+    }
+
+    await page.getByRole('button', { name: 'Yes, of course!' }).click();
   }
 }
